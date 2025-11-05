@@ -245,15 +245,15 @@ const AdminDashboard = () => {
                 Quick Actions
               </h3>
               <div className="flex flex-wrap gap-3">
-                <Button className="gap-2">
+                <Button className="gap-2" onClick={() => navigate("/admin/placement")}>
                   <Plus className="h-4 w-4" />
                   Add Jobs
                 </Button>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2" onClick={() => navigate("/admin/analytics")}>
                   <BarChart3 className="h-4 w-4" />
                   View Analytics
                 </Button>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2" onClick={() => window.location.reload()}>
                   <RefreshCw className="h-4 w-4" />
                   Sync
                 </Button>
