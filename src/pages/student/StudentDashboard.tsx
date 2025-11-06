@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 // Mock data for charts
 const gradeData = [
@@ -28,6 +29,8 @@ const skillData = [
 ];
 
 const StudentDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header / Navbar */}
@@ -44,11 +47,11 @@ const StudentDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={() => navigate('/student/notifications')}>
               <Bell className="h-5 w-5" />
               <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => navigate('/student/profile')}>
               <User className="h-5 w-5" />
             </Button>
           </div>
@@ -64,7 +67,7 @@ const StudentDashboard = () => {
 
         {/* Summary Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/student/grades')}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Predicted GPA</CardTitle>
               <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -77,7 +80,7 @@ const StudentDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950 dark:to-yellow-900 border-yellow-200 dark:border-yellow-800">
+          <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950 dark:to-yellow-900 border-yellow-200 dark:border-yellow-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/student/attendance')}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Attendance</CardTitle>
               <Calendar className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
@@ -90,7 +93,7 @@ const StudentDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/student/placement-readiness')}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Placement Readiness</CardTitle>
               <Briefcase className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -103,7 +106,7 @@ const StudentDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border-red-200 dark:border-red-800">
+          <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border-red-200 dark:border-red-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/student/alerts')}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">At-Risk Alerts</CardTitle>
               <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
@@ -194,7 +197,7 @@ const StudentDashboard = () => {
                 <div className="flex-1">
                   <p className="font-medium text-sm">Revise Module: Data Structures</p>
                   <p className="text-xs text-muted-foreground">Low quiz scores detected</p>
-                  <Button variant="link" className="h-auto p-0 text-xs mt-1">View Module →</Button>
+                  <Button variant="link" className="h-auto p-0 text-xs mt-1" onClick={() => navigate('/student/courses/data-structures')}>View Module →</Button>
                 </div>
               </div>
 
@@ -203,7 +206,7 @@ const StudentDashboard = () => {
                 <div className="flex-1">
                   <p className="font-medium text-sm">Meet Your Mentor</p>
                   <p className="text-xs text-muted-foreground">Schedule a session this week</p>
-                  <Button variant="link" className="h-auto p-0 text-xs mt-1">Schedule →</Button>
+                  <Button variant="link" className="h-auto p-0 text-xs mt-1" onClick={() => navigate('/student/mentor')}>Schedule →</Button>
                 </div>
               </div>
 
@@ -212,7 +215,7 @@ const StudentDashboard = () => {
                 <div className="flex-1">
                   <p className="font-medium text-sm">Recommended Job: Software Intern at Infosys</p>
                   <p className="text-xs text-muted-foreground">92% match based on your skills</p>
-                  <Button variant="link" className="h-auto p-0 text-xs mt-1">Apply Now →</Button>
+                  <Button variant="link" className="h-auto p-0 text-xs mt-1" onClick={() => navigate('/student/jobs/infosys-intern')}>Apply Now →</Button>
                 </div>
               </div>
 
@@ -221,7 +224,7 @@ const StudentDashboard = () => {
                 <div className="flex-1">
                   <p className="font-medium text-sm">Improve Resume</p>
                   <p className="text-xs text-muted-foreground">Add 2 more projects to increase readiness</p>
-                  <Button variant="link" className="h-auto p-0 text-xs mt-1">Edit Resume →</Button>
+                  <Button variant="link" className="h-auto p-0 text-xs mt-1" onClick={() => navigate('/student/resume')}>Edit Resume →</Button>
                 </div>
               </div>
             </CardContent>
