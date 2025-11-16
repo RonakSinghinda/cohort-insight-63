@@ -32,9 +32,9 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Header / Navbar */}
-      <header className="sticky top-0 z-50 border-b bg-card shadow-sm">
+      <header className="sticky top-0 z-50 border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-6">
             <h1 className="text-xl font-bold text-primary">DeepTech Campus</h1>
@@ -58,7 +58,7 @@ const StudentDashboard = () => {
         </div>
       </header>
 
-      <main className="container mx-auto p-6 space-y-6">
+      <main className="container mx-auto p-6 space-y-6 bg-gradient-to-b from-transparent via-blue-50/30 to-slate-50 dark:via-slate-800/10 dark:to-slate-900 rounded-lg">
         {/* Welcome Section */}
         <div className="space-y-2">
           <h2 className="text-3xl font-bold text-foreground">👋 Welcome back, Ronak Singh!</h2>
@@ -281,7 +281,7 @@ const StudentDashboard = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t py-6 mt-12">
+      <footer className="border-t border-border/50 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto text-center text-sm text-muted-foreground">
           © 2025 DeepTech Campus. All rights reserved.
         </div>
