@@ -12,6 +12,7 @@ interface StatsCardProps {
     value: number;
     isPositive: boolean;
   };
+  onClick?: () => void;
 }
 
 export const StatsCard = ({ 
@@ -21,7 +22,8 @@ export const StatsCard = ({
   icon, 
   accent = "primary",
   variant = "default",
-  trend 
+  trend,
+  onClick
 }: StatsCardProps) => {
   const IconComponent = typeof icon === "function" ? icon : null;
   const iconElement = IconComponent ? <IconComponent className="h-6 w-6 text-primary" /> : icon;
@@ -33,7 +35,10 @@ export const StatsCard = ({
     : "card-base";
 
   return (
-    <div className={`${cardClasses} flex flex-col justify-between`}>
+    <div 
+      className={`${cardClasses} flex flex-col justify-between ${onClick ? "cursor-pointer hover:scale-[1.02] transition-transform" : ""}`}
+      onClick={onClick}
+    >
       <div className="flex items-start justify-between">
         <div>
           <div className="stat-title">{title}</div>
