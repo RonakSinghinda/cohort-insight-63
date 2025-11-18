@@ -25,8 +25,16 @@ export const StatsCard = ({
   trend,
   onClick
 }: StatsCardProps) => {
-  const IconComponent = typeof icon === "function" ? icon : null;
-  const iconElement = IconComponent ? <IconComponent className="h-6 w-6 text-primary" /> : icon;
+  // Properly handle icon rendering - check if it's a React component or already a React element
+  let iconElement: React.ReactNode = null;
+  if (icon) {
+    if (React.isValidElement(icon)) {
+      iconElement = icon;
+    } else if (typeof icon === "function") {
+      const IconComponent = icon as LucideIcon;
+      iconElement = <IconComponent className="h-6 w-6 text-primary" />;
+    }
+  }
 
   const cardClasses = variant === "glass" 
     ? "card-base card-glass" 
