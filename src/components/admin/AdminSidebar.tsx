@@ -19,28 +19,47 @@ const menuItems = [
   { icon: Settings, label: "Settings", path: "/admin/settings" },
 ];
 
-export const AdminSidebar = () => {
+interface ThemeProps {
+  card: string;
+  text: string;
+  textMuted: string;
+  hover: string;
+}
+
+interface AdminSidebarProps {
+  theme?: ThemeProps;
+}
+
+export const AdminSidebar = ({ theme }: AdminSidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Fallback to dark theme if no theme prop provided
+  const currentTheme = theme || {
+    card: "bg-slate-900 border-slate-800",
+    text: "text-slate-50",
+    textMuted: "text-slate-400",
+    hover: "hover:bg-slate-800",
+  };
 
   return (
     <aside
       className={cn(
-        "bg-card border-r border-border transition-all duration-300 flex flex-col",
+        `${currentTheme.card} border-r transition-all duration-300 flex flex-col`,
         isCollapsed ? "w-20" : "w-64"
       )}
     >
       {/* Header */}
-      <div className="p-4 border-b border-border flex items-center justify-between">
+      <div className={`p-4 border-b ${currentTheme.card.split("border-")[1]} flex items-center justify-between`}>
         {!isCollapsed && (
           <div className="space-y-1">
-            <h2 className="text-lg font-semibold text-foreground">Admin Details</h2>
+            <h2 className={`text-lg font-semibold ${currentTheme.text}`}>Admin Details</h2>
           </div>
         )}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-muted-foreground hover:text-foreground"
+          className={`${currentTheme.textMuted} hover:${currentTheme.text}`}
         >
           <Menu className="h-5 w-5" />
         </Button>
@@ -55,8 +74,7 @@ export const AdminSidebar = () => {
             className={({ isActive }) =>
               cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
-                "hover:bg-accent hover:text-accent-foreground",
-                isActive && "bg-primary text-primary-foreground hover:bg-primary/90",
+                isActive ? "bg-primary text-primary-foreground hover:bg-primary/90" : `${currentTheme.hover}`,
                 isCollapsed && "justify-center"
               )
             }

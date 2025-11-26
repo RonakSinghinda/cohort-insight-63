@@ -1,6 +1,12 @@
 import React from "react";
 import { LucideIcon } from "lucide-react";
 
+interface ThemeProps {
+  card: string;
+  text: string;
+  textMuted: string;
+}
+
 interface StatsCardProps {
   title: string;
   value: string | number;
@@ -12,19 +18,28 @@ interface StatsCardProps {
     value: number;
     isPositive: boolean;
   };
+  theme?: ThemeProps;
   onClick?: () => void;
 }
 
-export const StatsCard = ({ 
-  title, 
-  value, 
-  subtitle, 
-  icon, 
+export const StatsCard = ({
+  title,
+  value,
+  subtitle,
+  icon,
   accent = "primary",
   variant = "default",
   trend,
+  theme,
   onClick
 }: StatsCardProps) => {
+  // Fallback to dark theme if no theme prop provided
+  const currentTheme = theme || {
+    card: "bg-slate-900 border-slate-800",
+    text: "text-slate-50",
+    textMuted: "text-slate-400",
+  };
+
   // Properly handle icon rendering - check if it's a React component or already a React element
   let iconElement: React.ReactNode = null;
   if (icon) {
@@ -36,23 +51,17 @@ export const StatsCard = ({
     }
   }
 
-  const cardClasses = variant === "glass" 
-    ? "card-base card-glass" 
-    : variant === "elevated" 
-    ? "card-base card-elevated" 
-    : "card-base";
-
   return (
-    <div 
-      className={`${cardClasses} flex flex-col justify-between ${onClick ? "cursor-pointer hover:scale-[1.02] transition-transform" : ""}`}
+    <div
+      className={`${currentTheme.card} rounded-lg border p-5 flex flex-col justify-between transition-colors duration-300 ${onClick ? "cursor-pointer hover:scale-[1.02] transition-transform" : ""}`}
       onClick={onClick}
     >
       <div className="flex items-start justify-between">
         <div>
-          <div className="stat-title">{title}</div>
-          <div className="stat-value">{value}</div>
+          <div className={`${currentTheme.textMuted} text-sm`}>{title}</div>
+          <div className={`${currentTheme.text} text-xl font-bold text-primary mt-1`}>{value}</div>
           {subtitle && (
-            <div className="text-sm text-[rgba(255,255,255,0.6)] mt-1">{subtitle}</div>
+            <div className={`text-sm ${currentTheme.textMuted} mt-1`}>{subtitle}</div>
           )}
           {trend && (
             <div className="flex items-center gap-1 mt-1">
@@ -64,14 +73,14 @@ export const StatsCard = ({
                 {trend.isPositive ? "+" : ""}
                 {trend.value}%
               </span>
-              <span className="text-xs text-muted-foreground">vs last month</span>
+              <span className={`text-xs ${currentTheme.textMuted}`}>vs last month</span>
             </div>
           )}
         </div>
         {icon && (
           <div className="ml-4">
-            <div 
-              className="w-12 h-12 rounded-lg flex items-center justify-center shadow-[0_6px_18px_rgba(0,0,0,0.45)]" 
+            <div
+              className="w-12 h-12 rounded-lg flex items-center justify-center shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
               style={{ background: `linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04))` }}
             >
               {iconElement}

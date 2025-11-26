@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { TaskList } from "@/components/admin/TaskList";
@@ -23,6 +24,8 @@ import {
   RefreshCw,
   BarChart3,
   Bell,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -34,7 +37,51 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { rechartsDarkTheme } from "@/utils/chartOptions";
+
+// ==================== THEME CONFIGURATION ====================
+
+const lightTheme = {
+  background: "bg-slate-50",
+  card: "bg-white border-slate-200",
+  text: "text-slate-900",
+  textMuted: "text-slate-600",
+  nav: "bg-white border-slate-200",
+  hover: "hover:bg-slate-100",
+  tooltipBg: "#ffffff",
+  tooltipBorder: "#e2e8f0",
+  gridColor: "#cbd5e1",
+  textColor: "#334155",
+};
+
+const darkTheme = {
+  background: "bg-slate-950",
+  card: "bg-slate-900 border-slate-800",
+  text: "text-slate-50",
+  textMuted: "text-slate-400",
+  nav: "bg-slate-900 border-slate-800",
+  hover: "hover:bg-slate-800",
+  tooltipBg: "#1e293b",
+  tooltipBorder: "#334155",
+  gridColor: "#475569",
+  textColor: "#cbd5e1",
+};
+
+const chartThemes = {
+  light: {
+    tooltipBg: "#ffffff",
+    tooltipBorder: "#e2e8f0",
+    gridColor: "#cbd5e1",
+    textColor: "#334155",
+  },
+  dark: {
+    tooltipBg: "#1e293b",
+    tooltipBorder: "#334155",
+    gridColor: "#475569",
+    textColor: "#cbd5e1",
+  }
+};
+
+// ==================== MOCK DATA ====================
 
 const placementData = [
   { month: "Jan", placements: 12 },
@@ -97,38 +144,58 @@ const taskItems = [
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [isDark, setIsDark] = useState(false);
+
+  const theme = isDark ? darkTheme : lightTheme;
+  const chartTheme = isDark ? chartThemes.dark : chartThemes.light;
+
+  // Apply theme to document
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   return (
-    <div className="flex h-screen w-full bg-background">
-      <AdminSidebar />
+    <div className={`flex h-screen w-full ${theme.background} transition-colors duration-300`}>
+      <AdminSidebar theme={theme} />
 
       <main className="flex-1 overflow-y-auto">
         {/* Top Bar - Clean Navigation */}
-        <nav className="w-full border-b border-border/20 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <nav className={`${theme.nav} border-b ${theme.card.split('border-')[1]} sticky top-0 z-50 transition-colors duration-300`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-6 flex-1">
                 <div className="flex-shrink-0">
-                  <h1 className="text-xl font-bold text-foreground">DeepTech Campus</h1>
+                  <h1 className={`text-xl font-bold ${theme.text}`}>DeepTech Campus</h1>
                 </div>
                 <div className="hidden md:flex flex-1 max-w-sm">
                   <div className="relative w-full">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${theme.textMuted}`} />
                     <input
                       placeholder="Search jobs, courses..."
-                      className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-full text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                      className={`w-full pl-10 pr-4 py-2 ${theme.background} border ${theme.card.split('border-')[1]} rounded-full text-sm ${theme.textMuted} focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all`}
                     />
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button className="p-2 rounded-full hover:bg-accent transition-colors relative">
-                  <Bell className="h-5 w-5 text-foreground" />
+                <button className={`p-2 rounded-full ${theme.hover} transition-colors relative`}>
+                  <Bell className={`h-5 w-5 ${theme.text}`} />
                 </button>
-                <div className="h-8 w-px bg-border mx-2" />
+                <button
+                  onClick={() => setIsDark(!isDark)}
+                  className={`p-2 rounded-full ${theme.hover} transition-colors`}
+                  title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  {isDark ? <Sun className={`h-5 w-5 ${theme.text}`} /> : <Moon className={`h-5 w-5 ${theme.text}`} />}
+                </button>
+                <div className={`h-8 w-px ${isDark ? "bg-slate-700" : "bg-slate-300"} mx-2`} />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="p-2 rounded-full hover:bg-accent transition-colors">
+                    <button className={`p-2 rounded-full ${theme.hover} transition-colors`}>
                       <Avatar className="h-8 w-8">
                         <AvatarFallback className="bg-primary text-primary-foreground">
                           AP
@@ -165,6 +232,7 @@ const AdminDashboard = () => {
                   icon={Users}
                   variant="elevated"
                   trend={{ value: 12, isPositive: true }}
+                  theme={theme}
                 />
                 <StatsCard
                   title="Faculty Members"
@@ -173,6 +241,7 @@ const AdminDashboard = () => {
                   icon={GraduationCap}
                   variant="elevated"
                   trend={{ value: 3, isPositive: true }}
+                  theme={theme}
                 />
                 <StatsCard
                   title="Active Drives"
@@ -181,6 +250,7 @@ const AdminDashboard = () => {
                   icon={Briefcase}
                   variant="elevated"
                   trend={{ value: 2, isPositive: true }}
+                  theme={theme}
                 />
                 <StatsCard
                   title="Placement Rate"
@@ -189,19 +259,20 @@ const AdminDashboard = () => {
                   icon={TrendingUp}
                   variant="elevated"
                   trend={{ value: 5, isPositive: true }}
+                  theme={theme}
                 />
               </div>
 
               {/* Charts */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="card-base">
+                <div className={`${theme.card} rounded-lg border p-5 space-y-4 transition-colors duration-300`}>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="section-title">
+                        <h3 className={`font-bold text-lg ${theme.text}`}>
                           Placement Trend This Year
                         </h3>
-                        <p className="text-sm text-[rgba(255,255,255,0.6)] mt-1">
+                        <p className={`text-sm ${theme.textMuted} mt-1`}>
                           Monthly placement statistics
                         </p>
                       </div>
@@ -212,23 +283,23 @@ const AdminDashboard = () => {
                         <LineChart data={placementData}>
                           <CartesianGrid
                             strokeDasharray="3 3"
-                            stroke={rechartsDarkTheme.gridColor}
+                            stroke={chartTheme.gridColor}
                           />
                           <XAxis
                             dataKey="month"
-                            stroke={rechartsDarkTheme.textColor}
+                            stroke={chartTheme.textColor}
                             fontSize={12}
                           />
                           <YAxis
-                            stroke={rechartsDarkTheme.textColor}
+                            stroke={chartTheme.textColor}
                             fontSize={12}
                           />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: rechartsDarkTheme.tooltipBg,
-                              border: `1px solid ${rechartsDarkTheme.tooltipBorder}`,
+                              backgroundColor: chartTheme.tooltipBg,
+                              border: `1px solid ${chartTheme.tooltipBorder}`,
                               borderRadius: "var(--radius)",
-                              color: rechartsDarkTheme.textColor,
+                              color: chartTheme.textColor,
                             }}
                           />
                           <Line
@@ -245,12 +316,12 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="card-base">
+                <div className={`${theme.card} rounded-lg border p-5 space-y-4 transition-colors duration-300`}>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="section-title">Recent Updates</h3>
-                        <p className="text-sm text-[rgba(255,255,255,0.6)] mt-1">
+                        <h3 className={`font-bold text-lg ${theme.text}`}>Recent Updates</h3>
+                        <p className={`text-sm ${theme.textMuted} mt-1`}>
                           Latest activity
                         </p>
                       </div>
@@ -279,13 +350,13 @@ const AdminDashboard = () => {
                             />
                           </div>
                           <div className="flex-1 space-y-1">
-                            <p className="text-sm font-medium text-foreground">
+                            <p className={`text-sm font-medium ${theme.text}`}>
                               {update.title}
                             </p>
-                            <p className="text-xs text-[rgba(255,255,255,0.6)]">
+                            <p className={`text-xs ${theme.textMuted}`}>
                               {update.subtitle}
                             </p>
-                            <p className="text-xs text-[rgba(255,255,255,0.55)]">
+                            <p className={`text-xs ${theme.textMuted} opacity-75`}>
                               {update.time}
                             </p>
                           </div>
@@ -297,9 +368,9 @@ const AdminDashboard = () => {
               </div>
 
               {/* Recommendations / Quick Actions */}
-              <div className="card-base">
+              <div className={`${theme.card} rounded-lg border p-5 transition-colors duration-300`}>
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                  <h3 className="section-title">Quick Actions</h3>
+                  <h3 className={`font-bold text-lg ${theme.text}`}>Quick Actions</h3>
                   <div className="flex flex-wrap gap-3">
                     <Button
                       className="gap-2 btn-primary"
@@ -330,25 +401,25 @@ const AdminDashboard = () => {
             </div>
 
             <aside className="lg:col-span-4 space-y-6">
-              <TaskList items={taskItems} />
-              <div className="card-base">
-                <h3 className="section-title mb-4">Quick Links</h3>
+              <TaskList items={taskItems} theme={theme} />
+              <div className={`${theme.card} rounded-lg border p-5 transition-colors duration-300`}>
+                <h3 className={`font-bold text-lg ${theme.text} mb-4`}>Quick Links</h3>
                 <div className="space-y-2">
-                  <button className="w-full text-left p-3 rounded-md hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                    <div className="font-medium text-foreground">Student Portal</div>
-                    <div className="text-xs text-[rgba(255,255,255,0.6)]">
+                  <button className={`w-full text-left p-3 rounded-md ${theme.hover} transition-colors`}>
+                    <div className={`font-medium ${theme.text}`}>Student Portal</div>
+                    <div className={`text-xs ${theme.textMuted}`}>
                       Manage student profiles
                     </div>
                   </button>
-                  <button className="w-full text-left p-3 rounded-md hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                    <div className="font-medium text-foreground">Placement Drive</div>
-                    <div className="text-xs text-[rgba(255,255,255,0.6)]">
+                  <button className={`w-full text-left p-3 rounded-md ${theme.hover} transition-colors`}>
+                    <div className={`font-medium ${theme.text}`}>Placement Drive</div>
+                    <div className={`text-xs ${theme.textMuted}`}>
                       Schedule and manage drives
                     </div>
                   </button>
-                  <button className="w-full text-left p-3 rounded-md hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                    <div className="font-medium text-foreground">Analytics Dashboard</div>
-                    <div className="text-xs text-[rgba(255,255,255,0.6)]">
+                  <button className={`w-full text-left p-3 rounded-md ${theme.hover} transition-colors`}>
+                    <div className={`font-medium ${theme.text}`}>Analytics Dashboard</div>
+                    <div className={`text-xs ${theme.textMuted}`}>
                       View detailed reports
                     </div>
                   </button>
