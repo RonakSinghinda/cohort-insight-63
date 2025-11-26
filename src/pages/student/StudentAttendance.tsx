@@ -72,7 +72,7 @@ const StudentAttendance = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [filterStatus, setFilterStatus] = useState<"all" | "present" | "absent" | "late" | "excused">("all");
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   // Use auth user data or fallback
   const studentName = user?.name || "Guest User";

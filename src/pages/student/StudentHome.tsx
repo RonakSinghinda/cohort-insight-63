@@ -152,7 +152,7 @@ const recentNotifications = [
 // ==================== COMPONENT ====================
 
 export default function StudentHome() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();

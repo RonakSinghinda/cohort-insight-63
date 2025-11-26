@@ -68,7 +68,7 @@ const defaultStudentProfile = {
   gpa: 7.9,
   attendance: 84,
   lastUpdated: new Date().toLocaleDateString(),
-  photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Guest"
+  photo: "https://api.dicebear.com/7.x/avahttps://share.google/images/pwzfL4cQSRUGQU9rLtaaars/svg?seed=Guest"
 };
 
 const courses = [
@@ -175,7 +175,7 @@ const atRiskAlerts = [
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Use auth user data or fallback to default
