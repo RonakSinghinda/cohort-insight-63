@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Bell, Search, User, CheckCircle, XCircle, Clock, AlertCircle, Download, ArrowLeft, Calendar } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bell, CheckCircle, XCircle, Clock, AlertCircle, Download, ArrowLeft, Calendar, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { rechartsDarkTheme } from "@/utils/chartOptions";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Mock data for attendance records
 const attendanceRecords = [
@@ -69,7 +70,21 @@ interface AttendanceRecord {
 
 const StudentAttendance = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [filterStatus, setFilterStatus] = useState<"all" | "present" | "absent" | "late" | "excused">("all");
+  const [isDark, setIsDark] = useState(true);
+
+  // Use auth user data or fallback
+  const studentName = user?.name || "Guest User";
+  const studentUSN = user?.usn || "RV2208A12";
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   // Calculate attendance stats
   const totalClasses = attendanceRecords.length;

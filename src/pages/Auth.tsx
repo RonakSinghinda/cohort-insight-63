@@ -6,12 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role") || "student";
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const [loginData, setLoginData] = useState({
@@ -26,6 +28,18 @@ const Auth = () => {
     confirmPassword: "",
   });
 
+  // Extract username from email
+  const extractNameFromEmail = (email: string): string => {
+    // Get the part before @ symbol
+    const emailPart = email.split("@")[0];
+    // Replace dots and underscores with spaces, then capitalize each word
+    return emailPart
+      .replace(/[._-]/g, " ")
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -33,25 +47,41 @@ const Auth = () => {
     // Simulate login
     setTimeout(() => {
       setIsLoading(false);
+
+      // Extract name from email
+      const extractedName = extractNameFromEmail(loginData.email);
+
+      // Store user data in context
+      setUser({
+        name: extractedName,
+        email: loginData.email,
+        usn: "RV2208A12", // This can be fetched from backend later
+        course: "B.Tech",
+        branch: "Computer Science & Engineering",
+        semester: 4,
+        section: "A",
+        photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${extractedName}`
+      });
+
       toast({
         title: "Login Successful",
-        description: `Welcome back to DeepTech Campus`,
+        description: `Welcome back, ${extractedName}!`,
       });
-      
+
       // Navigate based on role
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else if (role === "faculty") {
         navigate("/faculty/dashboard");
       } else {
-        navigate("/student/dashboard");
+        navigate("/student/home");
       }
     }, 1000);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (signupData.password !== signupData.confirmPassword) {
       toast({
         title: "Error",
@@ -66,18 +96,33 @@ const Auth = () => {
     // Simulate signup
     setTimeout(() => {
       setIsLoading(false);
+
+      // Store user data in context (use the provided name or extract from email)
+      const userName = signupData.name || extractNameFromEmail(signupData.email);
+
+      setUser({
+        name: userName,
+        email: signupData.email,
+        usn: "RV2208A12", // This can be fetched from backend later
+        course: "B.Tech",
+        branch: "Computer Science & Engineering",
+        semester: 4,
+        section: "A",
+        photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`
+      });
+
       toast({
         title: "Account Created",
-        description: "Your account has been created successfully",
+        description: `Welcome, ${userName}!`,
       });
-      
+
       // Navigate based on role
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else if (role === "faculty") {
         navigate("/faculty/dashboard");
       } else {
-        navigate("/student/dashboard");
+        navigate("/student/home");
       }
     }, 1000);
   };
