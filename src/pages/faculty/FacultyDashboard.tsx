@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle } from "lucide-react";
+import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -266,7 +266,7 @@ export default function FacultyDashboard() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         {/* Stats Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {/* Total Students Card */}
           <div
             className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg`}
@@ -319,7 +319,7 @@ export default function FacultyDashboard() {
             </div>
           </div>
 
-          {/* Upcoming Teaching Tasks Card */}
+          {/* Urgent Tasks Card */}
           <div
             className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg`}
           >
@@ -340,6 +340,33 @@ export default function FacultyDashboard() {
               >
                 <CheckSquare
                   className={`w-8 h-8 ${isDark ? "text-orange-400" : "text-orange-600"}`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* At-Risk Students Card */}
+          <div
+            className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg cursor-pointer`}
+            onClick={() => navigate("/faculty/at-risk")}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium ${theme.subtext} mb-2`}>
+                  At-Risk Students
+                </p>
+                <p className={`text-4xl font-bold text-red-600`}>
+                  8
+                </p>
+                <p className={`text-xs ${theme.subtext} mt-2`}>
+                  Needs intervention
+                </p>
+              </div>
+              <div
+                className={`${isDark ? "bg-red-900/30" : "bg-red-100"} rounded-lg p-4`}
+              >
+                <AlertTriangle
+                  className={`w-8 h-8 ${isDark ? "text-red-400" : "text-red-600"}`}
                 />
               </div>
             </div>
