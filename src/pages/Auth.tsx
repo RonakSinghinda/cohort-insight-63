@@ -72,7 +72,7 @@ const Auth = () => {
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else if (role === "faculty") {
-        navigate("/faculty/dashboard");
+        navigate("/faculty/home");
       } else {
         navigate("/student/home");
       }
@@ -120,7 +120,7 @@ const Auth = () => {
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else if (role === "faculty") {
-        navigate("/faculty/dashboard");
+        navigate("/faculty/home");
       } else {
         navigate("/student/home");
       }
