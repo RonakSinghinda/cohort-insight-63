@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, ArrowRight } from "lucide-react";
 
 export default function FacultyHome() {
   const { user, logout } = useAuth();
@@ -73,9 +73,15 @@ export default function FacultyHome() {
             <h2 className={`text-5xl font-bold ${theme.accent} mb-8`}>
               {user.name}
             </h2>
-            <p className={`text-base ${theme.subtext}`}>
+            <p className={`text-base ${theme.subtext} mb-8`}>
               Ready to manage your courses and students?
             </p>
+            <Button
+              onClick={() => navigate("/faculty/dashboard")}
+              className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Go to Dashboard <ArrowRight className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>
