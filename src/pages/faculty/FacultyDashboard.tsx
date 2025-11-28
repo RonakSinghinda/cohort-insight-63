@@ -3,7 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun } from "lucide-react";
+import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle } from "lucide-react";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  Legend,
+} from "recharts";
 
 interface Course {
   code: string;
@@ -104,6 +119,43 @@ export default function FacultyDashboard() {
     },
   ];
 
+  // Chart data - Grade Trend (average marks improving/declining over time)
+  const gradeTrendData = [
+    { month: "Aug", avgMarks: 68 },
+    { month: "Sep", avgMarks: 71 },
+    { month: "Oct", avgMarks: 75 },
+    { month: "Nov", avgMarks: 78 },
+    { month: "Dec", avgMarks: 82 },
+    { month: "Jan", avgMarks: 85 },
+  ];
+
+  // Chart data - Course Difficulty Index (which subjects students struggle with)
+  const difficultyIndexData = [
+    { course: "Data Structures", difficulty: 65, avgScore: 78 },
+    { course: "Database", difficulty: 72, avgScore: 75 },
+    { course: "Web Dev", difficulty: 58, avgScore: 82 },
+    { course: "Algorithms", difficulty: 78, avgScore: 72 },
+    { course: "OOP", difficulty: 62, avgScore: 80 },
+  ];
+
+  // Chart data - Attendance Trend (daily/weekly attendance)
+  const attendanceTrendData = [
+    { week: "Week 1", percentage: 85 },
+    { week: "Week 2", percentage: 87 },
+    { week: "Week 3", percentage: 84 },
+    { week: "Week 4", percentage: 89 },
+    { week: "Week 5", percentage: 91 },
+    { week: "Week 6", percentage: 88 },
+  ];
+
+  // Chart data - Comparison Chart (compare sections/batches)
+  const comparisonData = [
+    { section: "Section A", average: 82, attendance: 88, taskCompletion: 92 },
+    { section: "Section B", average: 79, attendance: 85, taskCompletion: 88 },
+    { section: "Section C", average: 85, attendance: 91, taskCompletion: 95 },
+    { section: "Section D", average: 78, attendance: 82, taskCompletion: 85 },
+  ];
+
   // Calculate statistics
   const totalStudents = courses.reduce((sum, course) => sum + course.students, 0);
 
@@ -142,6 +194,22 @@ export default function FacultyDashboard() {
           action: "bg-red-100 text-red-700 border-red-300",
           pending: "bg-gray-100 text-gray-700 border-gray-300",
         },
+      };
+
+  const chartTheme = isDark
+    ? {
+        tooltipBg: "#1e293b",
+        tooltipBorder: "#334155",
+        gridColor: "#475569",
+        textColor: "#cbd5e1",
+        lineColor: "hsl(var(--primary))",
+      }
+    : {
+        tooltipBg: "#ffffff",
+        tooltipBorder: "#e2e8f0",
+        gridColor: "#cbd5e1",
+        textColor: "#334155",
+        lineColor: "hsl(var(--primary))",
       };
 
   const handleLogout = () => {
@@ -278,7 +346,215 @@ export default function FacultyDashboard() {
           </div>
         </div>
 
-        {/* Courses and Tasks Section */}
+        {/* Charts Section - Row 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Grade Trend Chart */}
+          <div className={`${theme.card} rounded-lg border p-6 transition-colors duration-300`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`font-bold text-lg ${theme.text}`}>
+                Grade Trend
+              </h3>
+              <TrendingUp className={`h-5 w-5 ${isDark ? "text-green-400" : "text-green-600"}`} />
+            </div>
+            <p className={`text-xs ${theme.subtext} mb-4`}>
+              Average marks progression over time
+            </p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={gradeTrendData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartTheme.gridColor}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    stroke={chartTheme.textColor}
+                    fontSize={12}
+                  />
+                  <YAxis stroke={chartTheme.textColor} fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: chartTheme.tooltipBg,
+                      border: `1px solid ${chartTheme.tooltipBorder}`,
+                      borderRadius: "var(--radius)",
+                      color: chartTheme.textColor,
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="avgMarks"
+                    stroke="#10b981"
+                    strokeWidth={3}
+                    dot={{ fill: "#10b981", r: 4 }}
+                    activeDot={{ r: 6 }}
+                    name="Avg Marks"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Course Difficulty Index Chart */}
+          <div className={`${theme.card} rounded-lg border p-6 transition-colors duration-300`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`font-bold text-lg ${theme.text}`}>
+                Course Difficulty Index
+              </h3>
+              <AlertCircle className={`h-5 w-5 ${isDark ? "text-orange-400" : "text-orange-600"}`} />
+            </div>
+            <p className={`text-xs ${theme.subtext} mb-4`}>
+              Difficulty level vs student performance
+            </p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={difficultyIndexData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartTheme.gridColor}
+                  />
+                  <XAxis
+                    dataKey="course"
+                    stroke={chartTheme.textColor}
+                    fontSize={12}
+                    angle={-45}
+                    textAnchor="end"
+                    height={100}
+                  />
+                  <YAxis stroke={chartTheme.textColor} fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: chartTheme.tooltipBg,
+                      border: `1px solid ${chartTheme.tooltipBorder}`,
+                      borderRadius: "var(--radius)",
+                      color: chartTheme.textColor,
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="difficulty" fill="#ef4444" name="Difficulty" radius={[8, 8, 0, 0]}>
+                    {difficultyIndexData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.difficulty > 70
+                            ? "#ef4444"
+                            : entry.difficulty > 60
+                            ? "#f59e0b"
+                            : "#10b981"
+                        }
+                      />
+                    ))}
+                  </Bar>
+                  <Bar dataKey="avgScore" fill="#3b82f6" name="Avg Score" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Section - Row 2 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Attendance Trend Chart */}
+          <div className={`${theme.card} rounded-lg border p-6 transition-colors duration-300`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`font-bold text-lg ${theme.text}`}>
+                Attendance Trend
+              </h3>
+              <TrendingUp className={`h-5 w-5 ${isDark ? "text-blue-400" : "text-blue-600"}`} />
+            </div>
+            <p className={`text-xs ${theme.subtext} mb-4`}>
+              Weekly attendance percentage
+            </p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={attendanceTrendData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartTheme.gridColor}
+                  />
+                  <XAxis
+                    dataKey="week"
+                    stroke={chartTheme.textColor}
+                    fontSize={12}
+                  />
+                  <YAxis stroke={chartTheme.textColor} fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: chartTheme.tooltipBg,
+                      border: `1px solid ${chartTheme.tooltipBorder}`,
+                      borderRadius: "var(--radius)",
+                      color: chartTheme.textColor,
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="percentage"
+                    fill="#3b82f6"
+                    fillOpacity={0.6}
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    name="Attendance %"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Comparison Chart (Sections/Batches) */}
+          <div className={`${theme.card} rounded-lg border p-6 transition-colors duration-300`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`font-bold text-lg ${theme.text}`}>
+                Section Performance Comparison
+              </h3>
+              <BarChart3 className={`h-5 w-5 ${isDark ? "text-purple-400" : "text-purple-600"}`} />
+            </div>
+            <p className={`text-xs ${theme.subtext} mb-4`}>
+              Compare metrics across all sections
+            </p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={comparisonData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartTheme.gridColor}
+                  />
+                  <XAxis
+                    dataKey="section"
+                    stroke={chartTheme.textColor}
+                    fontSize={12}
+                  />
+                  <YAxis stroke={chartTheme.textColor} fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: chartTheme.tooltipBg,
+                      border: `1px solid ${chartTheme.tooltipBorder}`,
+                      borderRadius: "var(--radius)",
+                      color: chartTheme.textColor,
+                    }}
+                  />
+                  <Legend />
+                  <Bar
+                    dataKey="average"
+                    fill="#3b82f6"
+                    name="Avg Marks"
+                    radius={[8, 8, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="attendance"
+                    fill="#10b981"
+                    name="Attendance %"
+                    radius={[8, 8, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="taskCompletion"
+                    fill="#f59e0b"
+                    name="Task Completion %"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Courses Overview */}
           <div className="lg:col-span-2">
