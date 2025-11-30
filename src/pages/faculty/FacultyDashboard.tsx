@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck, BookOpen } from "lucide-react";
+import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck, BookOpen, FileText, Upload, Megaphone, Download } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -39,6 +40,7 @@ interface TeachingTask {
 export default function FacultyDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -116,6 +118,65 @@ export default function FacultyDashboard() {
       badge: "Action",
       status: "action",
       date: "Nov 28",
+    },
+  ];
+
+  // Quick Actions for common faculty tasks
+  interface QuickAction {
+    id: string;
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    bgColor: string;
+    iconColor: string;
+    action: string;
+  }
+
+  const quickActions: QuickAction[] = [
+    {
+      id: "1",
+      title: "View Student Analytics",
+      description: "Track performance metrics",
+      icon: <BarChart3 className="w-6 h-6" />,
+      bgColor: isDark ? "bg-blue-900/30 border-blue-500/30" : "bg-blue-100 border-blue-300",
+      iconColor: isDark ? "text-blue-400" : "text-blue-600",
+      action: "analytics",
+    },
+    {
+      id: "2",
+      title: "Upload / Update Marks",
+      description: "Enter student grades",
+      icon: <Upload className="w-6 h-6" />,
+      bgColor: isDark ? "bg-green-900/30 border-green-500/30" : "bg-green-100 border-green-300",
+      iconColor: isDark ? "text-green-400" : "text-green-600",
+      action: "marks",
+    },
+    {
+      id: "3",
+      title: "Upload Attendance",
+      description: "Record class attendance",
+      icon: <Users className="w-6 h-6" />,
+      bgColor: isDark ? "bg-purple-900/30 border-purple-500/30" : "bg-purple-100 border-purple-300",
+      iconColor: isDark ? "text-purple-400" : "text-purple-600",
+      action: "attendance",
+    },
+    {
+      id: "4",
+      title: "Send Announcement",
+      description: "Notify your class",
+      icon: <Megaphone className="w-6 h-6" />,
+      bgColor: isDark ? "bg-orange-900/30 border-orange-500/30" : "bg-orange-100 border-orange-300",
+      iconColor: isDark ? "text-orange-400" : "text-orange-600",
+      action: "announcement",
+    },
+    {
+      id: "5",
+      title: "Download Reports",
+      description: "Export grades & attendance",
+      icon: <Download className="w-6 h-6" />,
+      bgColor: isDark ? "bg-indigo-900/30 border-indigo-500/30" : "bg-indigo-100 border-indigo-300",
+      iconColor: isDark ? "text-indigo-400" : "text-indigo-600",
+      action: "reports",
     },
   ];
 
@@ -222,6 +283,39 @@ export default function FacultyDashboard() {
       document.documentElement.classList.remove("dark");
     } else {
       document.documentElement.classList.add("dark");
+    }
+  };
+
+  const handleQuickAction = (action: string) => {
+    const messages: Record<string, { title: string; description: string }> = {
+      analytics: {
+        title: "Analytics View",
+        description: "Opening student analytics dashboard...",
+      },
+      marks: {
+        title: "Upload Marks",
+        description: "Redirecting to marks entry form...",
+      },
+      attendance: {
+        title: "Attendance Upload",
+        description: "Opening attendance sheet manager...",
+      },
+      announcement: {
+        title: "Send Announcement",
+        description: "Opening announcement composer...",
+      },
+      reports: {
+        title: "Download Reports",
+        description: "Generating and downloading reports...",
+      },
+    };
+
+    const msg = messages[action];
+    if (msg) {
+      toast({
+        title: msg.title,
+        description: msg.description,
+      });
     }
   };
 
@@ -424,6 +518,29 @@ export default function FacultyDashboard() {
                 />
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Quick Actions Section */}
+        <div className="mb-8">
+          <h2 className={`text-xl font-bold ${theme.text} mb-4`}>Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {quickActions.map((action) => (
+              <div
+                key={action.id}
+                onClick={() => handleQuickAction(action.action)}
+                className={`${theme.card} rounded-lg border p-5 transition-all duration-300 hover:shadow-lg cursor-pointer hover:-translate-y-1`}
+              >
+                <div className={`${action.bgColor} rounded-lg p-3 mb-4 w-fit border transition-colors duration-300`}>
+                  <div className={action.iconColor}>{action.icon}</div>
+                </div>
+                <h3 className={`font-semibold ${theme.text} mb-1`}>{action.title}</h3>
+                <p className={`text-sm ${theme.subtext}`}>{action.description}</p>
+                <button className={`mt-4 text-sm font-medium ${theme.accent} hover:opacity-80 transition-opacity`}>
+                  Open →
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
