@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck, BookOpen, FileText, Upload, Megaphone, Download } from "lucide-react";
+import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck, BookOpen, FileText, Upload, Megaphone, Download, Settings } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -515,6 +515,33 @@ export default function FacultyDashboard() {
               >
                 <BookOpen
                   className={`w-8 h-8 ${isDark ? "text-teal-400" : "text-teal-600"}`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Settings Card */}
+          <div
+            className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg cursor-pointer`}
+            onClick={() => navigate("/faculty/settings")}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium ${theme.subtext} mb-2`}>
+                  Settings
+                </p>
+                <p className={`text-sm font-semibold ${theme.text} truncate`}>
+                  {user?.email || "Account Settings"}
+                </p>
+                <p className={`text-xs ${theme.subtext} mt-2`}>
+                  Manage account
+                </p>
+              </div>
+              <div
+                className={`${isDark ? "bg-slate-700/30" : "bg-slate-100"} rounded-lg p-4`}
+              >
+                <Settings
+                  className={`w-8 h-8 ${isDark ? "text-slate-400" : "text-slate-600"}`}
                 />
               </div>
             </div>

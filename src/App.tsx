@@ -19,6 +19,7 @@ import FacultyDashboard from "./pages/faculty/FacultyDashboard";
 import AtRiskStudents from "./pages/faculty/AtRiskStudents";
 import MentorResponsibilities from "./pages/faculty/MentorResponsibilities";
 import FacultyStudents from "./pages/faculty/Students";
+import FacultySettings from "./pages/faculty/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/faculty/students" element={<FacultyStudents />} />
             <Route path="/faculty/at-risk" element={<AtRiskStudents />} />
             <Route path="/faculty/mentor" element={<MentorResponsibilities />} />
+            <Route path="/faculty/settings" element={<FacultySettings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
