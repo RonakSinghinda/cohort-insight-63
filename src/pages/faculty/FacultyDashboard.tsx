@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck } from "lucide-react";
+import { Users, BarChart3, CheckSquare, LogOut, Moon, Sun, TrendingUp, AlertCircle, AlertTriangle, UserCheck, BookOpen } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -266,7 +266,7 @@ export default function FacultyDashboard() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         {/* Stats Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
           {/* Total Students Card */}
           <div
             className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg`}
@@ -394,6 +394,33 @@ export default function FacultyDashboard() {
               >
                 <UserCheck
                   className={`w-8 h-8 ${isDark ? "text-purple-400" : "text-purple-600"}`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Student List Card */}
+          <div
+            className={`${theme.card} rounded-lg border p-6 transition-all duration-300 hover:shadow-lg cursor-pointer`}
+            onClick={() => navigate("/faculty/students")}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium ${theme.subtext} mb-2`}>
+                  Student List
+                </p>
+                <p className={`text-4xl font-bold ${isDark ? "text-teal-400" : "text-teal-600"}`}>
+                  10
+                </p>
+                <p className={`text-xs ${theme.subtext} mt-2`}>
+                  Total students
+                </p>
+              </div>
+              <div
+                className={`${isDark ? "bg-teal-900/30" : "bg-teal-100"} rounded-lg p-4`}
+              >
+                <BookOpen
+                  className={`w-8 h-8 ${isDark ? "text-teal-400" : "text-teal-600"}`}
                 />
               </div>
             </div>
